@@ -14,7 +14,7 @@ namespace PeterKottas.DotNetCore.WindowsService
 {
     public static class ServiceRunner<SERVICE> where SERVICE : IMicroService
     {
-        public static int Run(Action<HostConfigurator<SERVICE>> runAction)
+        public static HostConfiguration<SERVICE> Run(Action<HostConfigurator<SERVICE>> runAction)
         {
             var innerConfig = new HostConfiguration<SERVICE>();
             innerConfig.Action = ActionEnum.RunInteractive;
@@ -130,12 +130,12 @@ namespace PeterKottas.DotNetCore.WindowsService
                     innerConfig.Service = innerConfig.ServiceFactory(innerConfig.ExtraArguments);
                 }
                 ConfigureService(innerConfig);
-                return 0;
+                return innerConfig;
             }
             catch (Exception e)
             {
                 Error(innerConfig, e);
-                return -1;
+                return null;
             }
         }
 
@@ -306,7 +306,7 @@ namespace PeterKottas.DotNetCore.WindowsService
             }
         }
 
-        private static void Start(HostConfiguration<SERVICE> config)
+        public static void Start(HostConfiguration<SERVICE> config)
         {
             try
             {
@@ -318,7 +318,7 @@ namespace PeterKottas.DotNetCore.WindowsService
             }
         }
 
-        private static void Stop(HostConfiguration<SERVICE> config)
+        public static void Stop(HostConfiguration<SERVICE> config)
         {
             try
             {
@@ -330,7 +330,7 @@ namespace PeterKottas.DotNetCore.WindowsService
             }
         }
 
-        private static void Error(HostConfiguration<SERVICE> config, Exception e = null)
+        public static void Error(HostConfiguration<SERVICE> config, Exception e = null)
         {
             config.OnServiceError(e);
         }
