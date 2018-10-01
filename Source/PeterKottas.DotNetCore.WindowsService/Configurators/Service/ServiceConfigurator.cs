@@ -12,7 +12,7 @@ namespace PeterKottas.DotNetCore.WindowsService.Configurators.Service
             this.config = config;
         }
 
-        public void ServiceFactory(Func<List<string>, SERVICE> serviceFactory)
+        public void ServiceFactory(Func<List<string>, IMicroServiceController, SERVICE> serviceFactory)
         {
             config.ServiceFactory = serviceFactory;
         }
@@ -30,6 +30,31 @@ namespace PeterKottas.DotNetCore.WindowsService.Configurators.Service
         public void OnError(Action<Exception> onError)
         {
             config.OnServiceError = onError;
+        }
+
+        public void OnPause(Action<SERVICE> onPause)
+        {
+            config.OnServicePause = onPause;
+        }
+
+        public void OnInstall(Action<SERVICE> onInstall)
+        {
+            config.OnServiceInstall = onInstall;
+        }
+
+        public void OnUnInstall(Action<SERVICE> onUnInstall)
+        {
+            config.OnServiceUnInstall = onUnInstall;
+        }
+
+        public void OnContinue(Action<SERVICE> onContinue)
+        {
+            config.OnServiceContinue = onContinue;
+        }
+
+        public void OnShutdown(Action<SERVICE> onShutdown)
+        {
+            config.OnServiceShutdown = onShutdown;
         }
     }
 }
